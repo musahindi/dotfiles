@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Set up Vundle
+git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
+
+# Add symbolic link to dotfiles .vimrc
+VIMRC_PATH="$HOME/.vimrc"
+VIMRC_BAK="$HOME/.vimrc.bak"
+VIMRC_LOCATION="$PWD/vim/.vimrc"
+
+mv $VIMRC_PATH $VIMRC_BAK
+ln -s $VIMRC_LOCATION $VIMRC_PATH
+
+# Install vim plugins
+vim +PluginInstall +qall
