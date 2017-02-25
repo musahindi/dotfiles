@@ -45,7 +45,11 @@ set smarttab
 autocmd FileType ruby setlocal tabstop=2 shiftwidth=2
 autocmd FileType go setlocal tabstop=2 shiftwidth=2
 
+" Turn on line number for the current line and relative numbers for every
+" other line
 set number
+set relativenumber
+
 set noerrorbells visualbell t_vb= " Disable beep
 set backspace=indent,eol,start " Set delete button to delete autoindents, end of lines and start of lines
 set hlsearch " Highlights text when searching
