@@ -1,15 +1,41 @@
 #!/bin/bash
 
+# Returns the backup file name for the provided file name.
+function backup_name() {
+  echo "$1.bak"
+}
+
+# Backs up a dotfile and creates a simlink that links to its source controlled
+# dotfile variant.
+function backup_and_link() {
+  LINK_PATH=$1
+  FILE_PATH=$2
+  BACKUP_PATH=$(backup_name $LINK_PATH)
+
+  echo "Backing up $LINK_PATH..."
+  mv $LINK_PATH $BACKUP_PATH
+  echo "Linking $LINK_PATH to $FILE_PATH..."
+  ln -s $FILE_PATH $LINK_PATH
+  echo "Done."
+}
+
 # Set up Vundle
-git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
+VUNDLE_PATH="$HOME/.vim/bundle/Vundle.vim"
+if [ -e $VUNDLE_PATH ]; then
+  echo "Vundle already set up"
+else
+  echo "Cloning Vundle..."
+  git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
+  echo "Done."
+fi
 
-# Add symbolic link to dotfiles .vimrc
-VIMRC_PATH="$HOME/.vimrc"
-VIMRC_BAK="$HOME/.vimrc.bak"
-VIMRC_LOCATION="$PWD/vim/.vimrc"
-
-mv $VIMRC_PATH $VIMRC_BAK
-ln -s $VIMRC_LOCATION $VIMRC_PATH
+# Add symbolic link to dotfiles .vimrc and .xvimrc
+backup_and_link "$HOME/.vimrc" "$PWD/vim/.vimrc"
+backup_and_link "$HOME/.xvimrc" "$PWD/vim/.xvimrc"
 
 # Install vim plugins
+echo "Installing vim plugins..."
 vim +PluginInstall +qall
+echo "Done."
+
+echo "All dotfiles have been set up."
